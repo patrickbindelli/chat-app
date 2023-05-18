@@ -1,10 +1,12 @@
 import { StyleSheet } from "react-native";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: "100%",
-  },
-});
+const getStyles = (theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      width: "100%",
+      backgroundColor: theme.colors.background,
+    },
+  });
 
-export default styles;
+export default getStyles;
