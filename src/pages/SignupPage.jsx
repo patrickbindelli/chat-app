@@ -1,6 +1,6 @@
 import { useTheme } from "@react-navigation/native";
-import React from "react";
-import { KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 import Button from "../components/Button";
 import InputField from "../components/InputField";
@@ -9,8 +9,8 @@ const SignupPage = ({ navigation }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
-  const goToSignUp = () => {
-    navigation.navigate("Signup");
+  const goToLogin = () => {
+    navigation.navigate("Login");
   };
 
   return (
@@ -20,21 +20,44 @@ const SignupPage = ({ navigation }) => {
           <Text style={styles.title}>Cadastro</Text>
           <Text style={styles.text}>Precisamos saber mais sobre você!</Text>
         </View>
+
         <View style={styles.content}>
-          <InputField label="Email" placeholder="example@email.com" icon="mail-outline" />
-          <InputField label="Apelido" placeholder="Rogerinho" icon="person-outline" />
-          <InputField label="Email" placeholder="example@email.com" icon="mail-outline" />
+          <InputField label="Nome" placeholder="Rogerio da Silva" icon="person-outline" />
+          <InputField
+            label="Apelido"
+            placeholder="Rogerinho"
+            icon="md-chatbubble-ellipses-outline"
+          />
+          <InputField
+            label="Email"
+            placeholder="example@email.com"
+            icon="mail-outline"
+            keyboardType="email-address"
+          />
           <InputField
             label="Telefone"
             placeholder="+55 (22) 99999-9999"
             icon="phone-portrait-outline"
+            keyboardType="numeric"
           />
-          <InputField label="Senha" placeholder="********" icon="lock-closed-outline" />
+          <InputField
+            label="Senha"
+            placeholder="********"
+            icon="lock-closed-outline"
+            secureTextEntry
+          />
         </View>
+
         <View style={styles.buttonsContainer}>
           <Button title="Cadastrar-se" onPress={() => {}} />
         </View>
       </KeyboardAvoidingView>
+      <View style={styles.bottomTextContainer}>
+        <Text style={styles.text}>Já tem uma conta?</Text>
+        <TouchableOpacity onPress={goToLogin}>
+          <Text style={styles.primaryText}>Faça Login</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -60,7 +83,7 @@ const getStyles = (theme) =>
       gap: 20,
       alignItems: "center",
       justifyContent: "center",
-      paddingBottom: 10,
+      paddingBottom: 20,
     },
     bottomTextContainer: {
       flex: 1,

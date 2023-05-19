@@ -16,37 +16,37 @@ const Stack = createNativeStackNavigator();
 
 function App() {
   const scheme = useColorScheme();
-  NavigationBar.setBackgroundColorAsync(scheme === "dark" ? "black" : "white");
+  NavigationBar.setBackgroundColorAsync(
+    scheme === "dark" ? DarkTheme.colors.background : LightTheme.colors.background,
+  );
 
   const styles = getStyles(scheme === "dark" ? DarkTheme : LightTheme);
 
   return (
-    <>
-      <SafeAreaProvider>
-        <StatusBar
-          style="auto"
-          backgroundColor={
-            scheme === "dark" ? DarkTheme.colors.background : LightTheme.colors.background
-          }
-        />
-        <SafeAreaView style={styles.container}>
-          <NavigationContainer theme={scheme === "dark" ? DarkTheme : LightTheme}>
-            <Stack.Navigator
-              initialRouteName="Home"
-              screenOptions={{
-                statusBarAnimation: "slide",
-                headerShown: false,
-                animation: "slide_from_right",
-              }}
-            >
-              <Stack.Screen name="Home" component={HomeScreen} />
-              <Stack.Screen name="Login" component={LoginPage} />
-              <Stack.Screen name="Signup" component={SignupPage} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </SafeAreaView>
-      </SafeAreaProvider>
-    </>
+    <SafeAreaProvider>
+      <StatusBar
+        style="auto"
+        backgroundColor={
+          scheme === "dark" ? DarkTheme.colors.background : LightTheme.colors.background
+        }
+      />
+      <SafeAreaView style={styles.container}>
+        <NavigationContainer theme={scheme === "dark" ? DarkTheme : LightTheme}>
+          <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+              statusBarAnimation: "slide",
+              headerShown: false,
+              animation: "slide_from_right",
+            }}
+          >
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Login" component={LoginPage} />
+            <Stack.Screen name="Signup" component={SignupPage} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 

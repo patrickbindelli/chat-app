@@ -21,7 +21,12 @@ const LoginPage = ({ navigation }) => {
           <Text style={styles.text}>Bem vindo de volta!</Text>
         </View>
         <View style={styles.content}>
-          <InputField label="Email" placeholder="example@email.com" icon="mail-outline" />
+          <InputField
+            label="Email"
+            placeholder="example@email.com"
+            icon="mail-outline"
+            keyboardType="email-address"
+          />
           <InputField label="Senha" placeholder="********" icon="lock-closed-outline" />
         </View>
         <View style={styles.buttonsContainer}>
