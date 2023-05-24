@@ -2,12 +2,21 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import Animated, { useSharedValue, useAnimatedStyle, ZoomIn } from "react-native-reanimated";
 
 import Button from "../components/Button";
 
 const HomeScreen = ({ navigation }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
+
+  const opacityValue = useSharedValue(100);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacityValue.value,
+    };
+  });
 
   const gotToLogin = () => {
     navigation.navigate("Login");
@@ -24,7 +33,9 @@ const HomeScreen = ({ navigation }) => {
         <Text style={styles.text}>Para começar, realize o login ou cadastre-se</Text>
       </View>
       <View style={styles.iconContainer}>
-        <Ionicons name="md-chatbubbles-outline" size={200} color={theme.colors.primary} />
+        <Animated.View entering={ZoomIn.delay(500)}>
+          <Ionicons name="md-chatbubbles-outline" size={200} color={theme.colors.primary} />
+        </Animated.View>
       </View>
       <View style={styles.buttonsContainer}>
         <Button title="Cadastrar-se" onPress={goToSignUp} />

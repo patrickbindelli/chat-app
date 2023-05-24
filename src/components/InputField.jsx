@@ -9,7 +9,9 @@ const InputField = ({
   icon = "alarm-outline",
   keyboardType = "default",
   value,
+  onChangeText,
   secureTextEntry = false,
+  error = false,
 }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
@@ -23,12 +25,20 @@ const InputField = ({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{label}</Text>
+      <View style={styles.labelContainer}>
+        <Text style={error ? styles.errorText : styles.text}>{label}</Text>
+        {error && <Text style={styles.requiredText}>* campo obrigatório</Text>}
+      </View>
       <View style={styles.innerContainer}>
         <View style={styles.inputContainer}>
-          <Ionicons name={icon} size={20} color={theme.colors.text} />
+          <Ionicons
+            name={icon}
+            size={20}
+            color={error ? theme.colors.notification : theme.colors.text}
+          />
           <TextInput
             value={value}
+            onChangeText={onChangeText}
             secureTextEntry={passwordVisible}
             keyboardType={keyboardType}
             style={styles.inputField}
@@ -41,14 +51,23 @@ const InputField = ({
           {secureTextEntry && (
             <TouchableOpacity onPress={handlePasswordVisible}>
               {passwordVisible ? (
-                <Ionicons name="md-eye-off-outline" size={20} color={theme.colors.text} />
+                <Ionicons
+                  name="md-eye-off-outline"
+                  size={20}
+                  color={error ? theme.colors.notification : theme.colors.text}
+                />
               ) : (
-                <Ionicons name="md-eye-outline" size={20} color={theme.colors.text} />
+                <Ionicons
+                  name="md-eye-outline"
+                  size={20}
+                  color={error ? theme.colors.notification : theme.colors.text}
+                />
               )}
             </TouchableOpacity>
           )}
         </View>
-        <View style={isFocused ? styles.activeSeparator : styles.separator} />
+        {!error && <View style={isFocused ? styles.activeSeparator : styles.separator} />}
+        {error && <View style={styles.errorSeparator} />}
       </View>
     </View>
   );
@@ -84,6 +103,11 @@ const getStyles = (theme) =>
       fontWeight: "regular",
       color: theme.colors.text,
     },
+    errorText: {
+      fontSize: 15,
+      fontWeight: "regular",
+      color: theme.colors.notification,
+    },
     separator: {
       height: 1,
       width: "100%",
@@ -93,6 +117,22 @@ const getStyles = (theme) =>
       height: 1,
       width: "100%",
       backgroundColor: theme.colors.primary,
+    },
+    errorSeparator: {
+      height: 1,
+      width: "100%",
+      backgroundColor: theme.colors.notification,
+    },
+    labelContainer: {
+      width: "100%",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      gap: 5,
+    },
+    requiredText: {
+      fontSize: 10,
+      fontWeight: "regular",
+      color: theme.colors.notification,
     },
   });
 

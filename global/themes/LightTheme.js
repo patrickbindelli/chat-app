@@ -1,15 +1,18 @@
+import { indigo, slate, blackA, red } from "@radix-ui/colors";
+
 const LightTheme = {
   dark: false,
   colors: {
-    primary: "#AD7F58",
-    secondary: "#F3F3F2",
-    background: "#FEFDFB",
-    card: "#F3F3F2",
-    text: "#1B1B18",
-    lowContrastText: "#886349",
-    grayText: "#A1A09A",
-    border: "#353431",
-    notification: "rgb(255, 69, 58)",
+    primary: indigo.indigo9,
+    secondary: slate.slate3,
+    background: slate.slate1,
+    card: slate.slate1,
+    text: indigo.indigo12,
+    lowContrastText: indigo.indigo11,
+    grayText: slate.slate11,
+    border: slate.slate6,
+    notification: red.red9,
+    modal: blackA.blackA6,
   },
 };
 

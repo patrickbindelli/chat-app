@@ -1,16 +1,41 @@
 import { useTheme } from "@react-navigation/native";
-import React, { useState } from "react";
-import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import React from "react";
+import { KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Controller, useForm } from "react-hook-form";
 
 import Button from "../components/Button";
 import InputField from "../components/InputField";
+import useAuth from "../hooks/useAuth";
+import LoadingModal from "../components/LoadingModal";
 
 const SignupPage = ({ navigation }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
+  const { signup, loading } = useAuth();
+
   const goToLogin = () => {
     navigation.navigate("Login");
+  };
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "onBlur",
+
+    defaultValues: {
+      nome: "",
+      apelido: "",
+      email: "",
+      telefone: "",
+      senha: "",
+    },
+  });
+
+  const onSubmit = async (data) => {
+    signup(data);
   };
 
   return (
@@ -22,34 +47,102 @@ const SignupPage = ({ navigation }) => {
         </View>
 
         <View style={styles.content}>
-          <InputField label="Nome" placeholder="Rogerio da Silva" icon="person-outline" />
-          <InputField
-            label="Apelido"
-            placeholder="Rogerinho"
-            icon="md-chatbubble-ellipses-outline"
+          <Controller
+            name="nome"
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <InputField
+                label="Nome"
+                placeholder="Rogerio da Silva"
+                icon="person-outline"
+                onChangeText={onChange}
+                value={value}
+                error={errors.nome}
+              />
+            )}
           />
-          <InputField
-            label="Email"
-            placeholder="example@email.com"
-            icon="mail-outline"
-            keyboardType="email-address"
+
+          <Controller
+            name="apelido"
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <InputField
+                label="Apelido"
+                placeholder="Rogerinho"
+                icon="md-chatbubble-ellipses-outline"
+                onChangeText={onChange}
+                value={value}
+                error={errors.apelido}
+              />
+            )}
           />
-          <InputField
-            label="Telefone"
-            placeholder="+55 (22) 99999-9999"
-            icon="phone-portrait-outline"
-            keyboardType="numeric"
+
+          <Controller
+            name="email"
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <InputField
+                label="Email"
+                placeholder="example@email.com"
+                icon="mail-outline"
+                keyboardType="email-address"
+                onChangeText={onChange}
+                value={value}
+                error={errors.email}
+              />
+            )}
           />
-          <InputField
-            label="Senha"
-            placeholder="********"
-            icon="lock-closed-outline"
-            secureTextEntry
+
+          <Controller
+            name="telefone"
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <InputField
+                label="Telefone"
+                placeholder="+55 (22) 99999-9999"
+                icon="phone-portrait-outline"
+                keyboardType="numeric"
+                onChangeText={onChange}
+                value={value}
+                error={errors.telefone}
+              />
+            )}
+          />
+
+          <Controller
+            name="senha"
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <InputField
+                label="Senha"
+                placeholder="********"
+                icon="lock-closed-outline"
+                secureTextEntry
+                onChangeText={onChange}
+                value={value}
+                error={errors.senha}
+              />
+            )}
           />
         </View>
 
         <View style={styles.buttonsContainer}>
-          <Button title="Cadastrar-se" onPress={() => {}} />
+          <Button title="Cadastrar-se" onPress={handleSubmit(onSubmit)} />
         </View>
       </KeyboardAvoidingView>
       <View style={styles.bottomTextContainer}>
@@ -58,6 +151,8 @@ const SignupPage = ({ navigation }) => {
           <Text style={styles.primaryText}>Faça Login</Text>
         </TouchableOpacity>
       </View>
+
+      <LoadingModal open={loading} />
     </View>
   );
 };

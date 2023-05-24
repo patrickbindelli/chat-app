@@ -1,16 +1,38 @@
 import { useTheme } from "@react-navigation/native";
 import React from "react";
+import { Controller, useForm } from "react-hook-form";
 import { KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Button from "../components/Button";
 import InputField from "../components/InputField";
+import LoadingModal from "../components/LoadingModal";
+import useAuth from "../hooks/useAuth";
 
 const LoginPage = ({ navigation }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
+  const { login, loading } = useAuth();
+
   const goToSignUp = () => {
     navigation.navigate("Signup");
+  };
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "onBlur",
+
+    defaultValues: {
+      login: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = async (data) => {
+    login(data.login, data.password);
   };
 
   return (
@@ -20,17 +42,48 @@ const LoginPage = ({ navigation }) => {
           <Text style={styles.title}>Login</Text>
           <Text style={styles.text}>Bem vindo de volta!</Text>
         </View>
+
         <View style={styles.content}>
-          <InputField
-            label="Email"
-            placeholder="example@email.com"
-            icon="mail-outline"
-            keyboardType="email-address"
+          <Controller
+            name="login"
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <InputField
+                label="Email"
+                placeholder="+55 (22) 99999-9999"
+                icon="mail-outline"
+                keyboardType="numeric"
+                onChangeText={onChange}
+                value={value}
+                error={errors.login}
+              />
+            )}
           />
-          <InputField label="Senha" placeholder="********" icon="lock-closed-outline" />
+
+          <Controller
+            name="password"
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <InputField
+                label="Senha"
+                placeholder="********"
+                icon="lock-closed-outline"
+                onChangeText={onChange}
+                value={value}
+                error={errors.password}
+              />
+            )}
+          />
         </View>
+
         <View style={styles.buttonsContainer}>
-          <Button title="Login" onPress={() => {}} />
+          <Button title="Login" onPress={handleSubmit(onSubmit)} />
           <Text style={styles.primaryText}>Esqueceu a senha?</Text>
         </View>
       </KeyboardAvoidingView>
@@ -41,6 +94,8 @@ const LoginPage = ({ navigation }) => {
           <Text style={styles.primaryText}>Cadastre-se aqui</Text>
         </TouchableOpacity>
       </View>
+
+      <LoadingModal open={loading} />
     </View>
   );
 };
