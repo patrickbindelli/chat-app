@@ -15,6 +15,11 @@ const AuthProvider = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(false);
 
   const checkIfValidSession = async () => {
+    // setAuthenticated(true);
+    // setCheckingSession(false);
+    // setLoading(false);
+    // return;
+
     setCheckingSession(true);
     const loggedUserHash = await AsyncStorage.getItem("@logged_user_hash").then((data) =>
       JSON.parse(data),

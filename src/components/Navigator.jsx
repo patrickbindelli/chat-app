@@ -1,4 +1,4 @@
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useColorScheme } from "react-native";
 
@@ -14,6 +14,7 @@ const Stack = createNativeStackNavigator();
 
 const Navigator = () => {
   const scheme = useColorScheme();
+  const theme = useTheme();
   const { authenticated, loading } = useAuth();
 
   return (

@@ -12,6 +12,7 @@ const LightTheme = {
     grayText: slate.slate11,
     border: slate.slate6,
     notification: red.red9,
+    icons: slate.slate9,
     modal: blackA.blackA6,
   },
 };

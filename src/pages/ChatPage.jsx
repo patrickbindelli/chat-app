@@ -1,19 +1,59 @@
 import { useTheme } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import Button from "../components/Button";
-import useAuth from "../hooks/useAuth";
+import { KeyboardAvoidingView, ScrollView, StyleSheet } from "react-native";
+
+import ChatHeader from "../components/ChatHeader";
+import ChatInput from "../components/ChatInput";
+import Message from "../components/Message";
 
 export const ChatPage = () => {
   const theme = useTheme();
   const styles = getStyles(theme);
-  const { logout } = useAuth();
+
+  const mock = [
+    {
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed varius nunc consequat venenatis interdum. Fusce sed nisi sit amet ipsum tincidunt vestibulum in eu erat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.Phasellus porta, est quis consectetur sodales, metus dui condimentum felis, ut accumsansem purus eu tellus. Vestibulum pulvinar volutpat ante. Nullam in rhoncus lectus. Ut atultricies arcu, quis tristique ante. Sed sed felis ut justo consequat ultrices.",
+      user: true,
+    },
+    {
+      text: "Concordo",
+      user: false,
+    },
+    {
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed varius nunc consequat venenatis interdum. Fusce sed nisi sit amet ipsum tincidunt vestibulum in eu erat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.Phasellus porta, est quis consectetur sodales, metus dui condimentum felis, ut accumsansem purus eu tellus. Vestibulum pulvinar volutpat ante. Nullam in rhoncus lectus. Ut atultricies arcu, quis tristique ante. Sed sed felis ut justo consequat ultrices.",
+      user: true,
+    },
+    {
+      text: "Concordo",
+      user: false,
+    },
+    {
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed varius nunc consequat venenatis interdum. Fusce sed nisi sit amet ipsum tincidunt vestibulum in eu erat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.Phasellus porta, est quis consectetur sodales, metus dui condimentum felis, ut accumsansem purus eu tellus. Vestibulum pulvinar volutpat ante. Nullam in rhoncus lectus. Ut atultricies arcu, quis tristique ante. Sed sed felis ut justo consequat ultrices.",
+      user: true,
+    },
+    {
+      text: "Concordo",
+      user: false,
+    },
+  ];
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Mensagens</Text>
-      <Button title="Logout" onPress={logout} />
-    </View>
+    <KeyboardAvoidingView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
+      <StatusBar style="auto" backgroundColor={theme.colors.secondary} />
+      <ChatHeader />
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={styles.messagesContainer}
+        endFillColor={theme.colors.primary}
+        overScrollMode="never"
+      >
+        {mock.map((msg, index) => {
+          return <Message key={index} text={msg.text} user={msg.user} />;
+        })}
+      </ScrollView>
+      <ChatInput />
+    </KeyboardAvoidingView>
   );
 };
 
@@ -21,14 +61,15 @@ const getStyles = (theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: 10,
-      alignItems: "center",
-      justifyContent: "space-around",
     },
-    text: {
-      color: theme.colors.text,
-      textAlign: "center",
-      fontSize: 15,
+    header: {
+      backgroundColor: theme.colors.secondary,
+      width: "100%",
+      height: 40,
+    },
+    messagesContainer: {
+      padding: 10,
+      gap: 10,
     },
   });
 
