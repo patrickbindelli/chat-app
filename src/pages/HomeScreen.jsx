@@ -2,21 +2,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, ZoomIn } from "react-native-reanimated";
+import Animated, { ZoomIn } from "react-native-reanimated";
 
 import Button from "../components/Button";
 
 const HomeScreen = ({ navigation }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
-
-  const opacityValue = useSharedValue(100);
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: opacityValue.value,
-    };
-  });
 
   const gotToLogin = () => {
     navigation.navigate("Login");

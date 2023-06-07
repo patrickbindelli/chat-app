@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { MaskedTextInput } from "react-native-mask-text";
 
 const InputField = ({
   label = "Label",
@@ -12,6 +13,7 @@ const InputField = ({
   onChangeText,
   secureTextEntry = false,
   error = false,
+  mask,
 }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
@@ -36,18 +38,39 @@ const InputField = ({
             size={20}
             color={error ? theme.colors.notification : theme.colors.text}
           />
-          <TextInput
-            value={value}
-            onChangeText={onChangeText}
-            secureTextEntry={passwordVisible}
-            keyboardType={keyboardType}
-            style={styles.inputField}
-            placeholder={placeholder}
-            placeholderTextColor={theme.colors.grayText}
-            cursorColor={theme.colors.primary}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-          />
+          {mask ? (
+            <MaskedTextInput
+              mask={mask}
+              value={value}
+              onChangeText={(maskedValue, rawValue) => {
+                onChangeText(rawValue);
+              }}
+              secureTextEntry={passwordVisible}
+              keyboardType={keyboardType}
+              style={styles.inputField}
+              placeholder={placeholder}
+              placeholderTextColor={theme.colors.grayText}
+              cursorColor={theme.colors.primary}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              autoComplete="off"
+            />
+          ) : (
+            <TextInput
+              value={value}
+              onChangeText={onChangeText}
+              secureTextEntry={passwordVisible}
+              keyboardType={keyboardType}
+              style={styles.inputField}
+              placeholder={placeholder}
+              placeholderTextColor={theme.colors.grayText}
+              cursorColor={theme.colors.primary}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              autoComplete="username"
+              importantForAutofill="no"
+            />
+          )}
           {secureTextEntry && (
             <TouchableOpacity onPress={handlePasswordVisible}>
               {passwordVisible ? (

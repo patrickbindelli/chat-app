@@ -1,4 +1,4 @@
-import { NavigationContainer, useTheme } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useColorScheme } from "react-native";
 
@@ -8,13 +8,13 @@ import useAuth from "../hooks/useAuth";
 import ChatPage from "../pages/ChatPage";
 import HomeScreen from "../pages/HomeScreen";
 import LoginPage from "../pages/LoginPage";
+import PhotoSignupPage from "../pages/PhotoSignupPage";
 import SignupPage from "../pages/SignupPage";
 
 const Stack = createNativeStackNavigator();
 
 const Navigator = () => {
   const scheme = useColorScheme();
-  const theme = useTheme();
   const { authenticated, loading } = useAuth();
 
   return (
@@ -34,6 +34,7 @@ const Navigator = () => {
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Login" component={LoginPage} />
             <Stack.Screen name="Signup" component={SignupPage} />
+            <Stack.Screen name="PhotoSignup" component={PhotoSignupPage} />
           </>
         )}
       </Stack.Navigator>

@@ -1,18 +1,18 @@
 import { useTheme } from "@react-navigation/native";
 import React from "react";
-import { KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Controller, useForm } from "react-hook-form";
+import { KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Button from "../components/Button";
 import InputField from "../components/InputField";
-import useAuth from "../hooks/useAuth";
 import LoadingModal from "../components/LoadingModal";
+import useAuth from "../hooks/useAuth";
 
 const SignupPage = ({ navigation }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
-  const { signup, loading } = useAuth();
+  const { loading } = useAuth();
 
   const goToLogin = () => {
     navigation.navigate("Login");
@@ -27,7 +27,6 @@ const SignupPage = ({ navigation }) => {
 
     defaultValues: {
       nome: "",
-      apelido: "",
       email: "",
       telefone: "",
       senha: "",
@@ -35,7 +34,7 @@ const SignupPage = ({ navigation }) => {
   });
 
   const onSubmit = async (data) => {
-    signup(data);
+    navigation.navigate("PhotoSignup", { data });
   };
 
   return (
@@ -61,24 +60,6 @@ const SignupPage = ({ navigation }) => {
                 onChangeText={onChange}
                 value={value}
                 error={errors.nome}
-              />
-            )}
-          />
-
-          <Controller
-            name="apelido"
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <InputField
-                label="Apelido"
-                placeholder="Rogerinho"
-                icon="md-chatbubble-ellipses-outline"
-                onChangeText={onChange}
-                value={value}
-                error={errors.apelido}
               />
             )}
           />
@@ -110,8 +91,9 @@ const SignupPage = ({ navigation }) => {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <InputField
+                mask="(99) 99999-9999"
                 label="Telefone"
-                placeholder="+55 (22) 99999-9999"
+                placeholder="(22) 99999-9999"
                 icon="phone-portrait-outline"
                 keyboardType="numeric"
                 onChangeText={onChange}
@@ -133,6 +115,7 @@ const SignupPage = ({ navigation }) => {
                 placeholder="********"
                 icon="lock-closed-outline"
                 secureTextEntry
+                keyboardType="visible-password"
                 onChangeText={onChange}
                 value={value}
                 error={errors.senha}

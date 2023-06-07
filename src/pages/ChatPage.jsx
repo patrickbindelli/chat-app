@@ -1,15 +1,18 @@
 import { useTheme } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect } from "react";
 import { KeyboardAvoidingView, ScrollView, StyleSheet } from "react-native";
 
 import ChatHeader from "../components/ChatHeader";
 import ChatInput from "../components/ChatInput";
 import Message from "../components/Message";
+import useAuth from "../hooks/useAuth";
 
 export const ChatPage = () => {
   const theme = useTheme();
   const styles = getStyles(theme);
+
+  const { userData } = useAuth();
 
   const mock = [
     {
@@ -41,7 +44,7 @@ export const ChatPage = () => {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
       <StatusBar style="auto" backgroundColor={theme.colors.secondary} />
-      <ChatHeader />
+      <ChatHeader data={userData} />
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={styles.messagesContainer}

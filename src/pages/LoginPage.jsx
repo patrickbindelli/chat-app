@@ -52,9 +52,10 @@ const LoginPage = ({ navigation }) => {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <InputField
-                label="Email"
-                placeholder="+55 (22) 99999-9999"
-                icon="mail-outline"
+                mask="(99) 99999-9999"
+                label="Telefone"
+                placeholder="(22) 99999-9999"
+                icon="phone-portrait-outline"
                 keyboardType="numeric"
                 onChangeText={onChange}
                 value={value}
@@ -77,6 +78,8 @@ const LoginPage = ({ navigation }) => {
                 onChangeText={onChange}
                 value={value}
                 error={errors.password}
+                secureTextEntry
+                keyboardType="visible-password"
               />
             )}
           />

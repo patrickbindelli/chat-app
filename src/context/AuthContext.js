@@ -1,8 +1,9 @@
-import { SERVER_URL } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import * as SplashScreen from "expo-splash-screen";
 import React, { createContext, useEffect, useState } from "react";
+
+const SERVER_URL = "http://10.0.0.158:8080";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -13,13 +14,9 @@ const AuthProvider = ({ children }) => {
   const [checkingSession, setCheckingSession] = useState(true);
   const [error, setError] = useState(null);
   const [authenticated, setAuthenticated] = useState(false);
+  const [userData, setUserData] = useState();
 
   const checkIfValidSession = async () => {
-    // setAuthenticated(true);
-    // setCheckingSession(false);
-    // setLoading(false);
-    // return;
-
     setCheckingSession(true);
     const loggedUserHash = await AsyncStorage.getItem("@logged_user_hash").then((data) =>
       JSON.parse(data),
@@ -37,6 +34,7 @@ const AuthProvider = ({ children }) => {
       .then(({ data }) => {
         if (loggedUserHash === data) {
           setAuthenticated(true);
+          setUserData(loggedUser);
         } else {
           setAuthenticated(false);
         }
@@ -69,6 +67,11 @@ const AuthProvider = ({ children }) => {
     });
   };
 
+  const getLocalUserData = async () => {
+    const data = await AsyncStorage.getItem("@logged_user").then((data) => JSON.parse(data));
+    return data;
+  };
+
   const getUserHashcode = async (id) => {
     await axios.get(`${SERVER_URL}/user/${id}`).then(async ({ data }) => {
       await AsyncStorage.setItem("@logged_user_hash", JSON.stringify(data))
@@ -90,6 +93,8 @@ const AuthProvider = ({ children }) => {
         await saveUserData(data);
         await getUserHashcode(data.id);
         setError(null);
+
+        setUserData(data);
       })
       .catch(async (err) => {
         setError(err);
@@ -109,10 +114,11 @@ const AuthProvider = ({ children }) => {
     setAuthenticated(false);
   };
 
-  const signup = async ({ nome, apelido, avatar, senha, email, telefone }) => {
+  const signup = async ({ nome, avatar, senha, email, telefone }) => {
     setLoading(true);
+
     await axios
-      .post(`${SERVER_URL}/user/`, { nome, apelido, avatar, senha, email, telefone })
+      .post(`${SERVER_URL}/user/`, { nome, avatar, senha, email, telefone })
       .then(() => {
         login(telefone, senha);
         setError(null);
@@ -124,7 +130,9 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ authenticated, loading, error, login, logout, signup }}>
+    <AuthContext.Provider
+      value={{ authenticated, loading, error, login, logout, signup, userData }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,10 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
-import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import React, { useEffect } from "react";
+import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+
 import useAuth from "../hooks/useAuth";
 
-const ChatHeader = () => {
+const ChatHeader = ({ data }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
   const { logout } = useAuth();
@@ -16,8 +17,12 @@ const ChatHeader = () => {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.info}>
-        <Ionicons name="person-circle-outline" size={40} color={theme.colors.text} />
-        <Text style={styles.text}>Robertinho</Text>
+        {data ? (
+          <Image source={{ uri: data.avatar }} style={styles.image} />
+        ) : (
+          <Ionicons name="person-circle-outline" size={40} color={theme.colors.text} />
+        )}
+        <Text style={styles.text}>{data ? data.nome : "Robertinho"}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity>
@@ -49,6 +54,13 @@ const getStyles = (theme) =>
       fontSize: 18,
       fontWeight: "500",
       color: theme.colors.text,
+    },
+    image: {
+      width: 40,
+      height: 40,
+      borderRadius: 40 / 2,
+
+      borderWidth: 1,
     },
   });
 
