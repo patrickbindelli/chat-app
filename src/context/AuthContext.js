@@ -12,15 +12,21 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
-  const [error, setError] = useState(null);
+  const [loginError, setLoginError] = useState("");
+  const [signupError, setSignupError] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const [userData, setUserData] = useState();
+
+  const handleSetUserData = (data) => {
+    setUserData(data);
+  };
 
   const checkIfValidSession = async () => {
     setCheckingSession(true);
     const loggedUserHash = await AsyncStorage.getItem("@logged_user_hash").then((data) =>
       JSON.parse(data),
     );
+
     const loggedUser = await AsyncStorage.getItem("@logged_user").then((data) => JSON.parse(data));
 
     if (!loggedUser || !loggedUserHash) {
@@ -34,7 +40,7 @@ const AuthProvider = ({ children }) => {
       .then(({ data }) => {
         if (loggedUserHash === data) {
           setAuthenticated(true);
-          setUserData(loggedUser);
+          handleSetUserData(loggedUser);
         } else {
           setAuthenticated(false);
         }
@@ -67,11 +73,6 @@ const AuthProvider = ({ children }) => {
     });
   };
 
-  const getLocalUserData = async () => {
-    const data = await AsyncStorage.getItem("@logged_user").then((data) => JSON.parse(data));
-    return data;
-  };
-
   const getUserHashcode = async (id) => {
     await axios.get(`${SERVER_URL}/user/${id}`).then(async ({ data }) => {
       await AsyncStorage.setItem("@logged_user_hash", JSON.stringify(data))
@@ -92,12 +93,13 @@ const AuthProvider = ({ children }) => {
       .then(async ({ data }) => {
         await saveUserData(data);
         await getUserHashcode(data.id);
-        setError(null);
+        setLoginError("");
 
-        setUserData(data);
+        handleSetUserData(data);
       })
       .catch(async (err) => {
-        setError(err);
+        setLoginError("Usuário e/ou Senha inválidos");
+        console.log("Login Error: ", err);
         await AsyncStorage.removeItem("@logged_user");
         await AsyncStorage.removeItem("@logged_user_hash");
       })
@@ -121,17 +123,18 @@ const AuthProvider = ({ children }) => {
       .post(`${SERVER_URL}/user/`, { nome, avatar, senha, email, telefone })
       .then(() => {
         login(telefone, senha);
-        setError(null);
+        setLoginError("");
       })
       .catch((err) => {
         setLoading(false);
-        setError(err);
+        console.log("SignUp Error: ", err);
+        setSignupError("Ocorreu um erro ao cadastrar o usuário");
       });
   };
 
   return (
     <AuthContext.Provider
-      value={{ authenticated, loading, error, login, logout, signup, userData }}
+      value={{ authenticated, loading, loginError, signupError, login, logout, signup, userData }}
     >
       {children}
     </AuthContext.Provider>

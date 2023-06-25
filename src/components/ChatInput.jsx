@@ -1,18 +1,27 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 import React from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
-export const ChatInput = () => {
+export const ChatInput = ({ value, onChangeText, onPress }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
   return (
     <View style={styles.container}>
       <View style={styles.chatInput}>
-        <Ionicons name="happy-outline" size={24} color={theme.colors.icons} />
-        <TextInput style={styles.textInput} />
-        <Ionicons name="send-sharp" size={24} color={theme.colors.icons} />
+        <ScrollView overScrollMode="never">
+          <TextInput
+            value={value}
+            onChangeText={onChangeText}
+            style={styles.textInput}
+            onSubmitEditing={onPress}
+            multiline
+          />
+        </ScrollView>
+        <TouchableOpacity style={styles.sendIcon} onPress={onPress}>
+          <Ionicons name="send-sharp" size={24} color={theme.colors.icons} />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -28,16 +37,23 @@ const getStyles = (theme) =>
       width: "100%",
       flexDirection: "row",
       backgroundColor: theme.colors.secondary,
-      alignContent: "center",
+      alignContent: "flex-end",
       justifyContent: "center",
       gap: 10,
-      borderRadius: 50,
-      padding: 10,
+      borderRadius: 30,
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      maxHeight: 100,
+      overflow: "scroll",
     },
     textInput: {
       flex: 1,
       color: theme.colors.text,
       fontSize: 15,
+    },
+    sendIcon: {
+      flexDirection: "row",
+      alignItems: "flex-end",
     },
     text: {
       color: theme.colors.text,

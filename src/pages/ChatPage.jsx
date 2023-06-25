@@ -1,61 +1,69 @@
 import { useTheme } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { KeyboardAvoidingView, ScrollView, StyleSheet } from "react-native";
 
+import * as api from "../api/message";
 import ChatHeader from "../components/ChatHeader";
 import ChatInput from "../components/ChatInput";
 import Message from "../components/Message";
 import useAuth from "../hooks/useAuth";
 
-export const ChatPage = () => {
+const ChatPage = ({ route, navigation }) => {
+  const { user } = route.params || {};
   const theme = useTheme();
   const styles = getStyles(theme);
 
   const { userData } = useAuth();
 
-  const mock = [
-    {
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed varius nunc consequat venenatis interdum. Fusce sed nisi sit amet ipsum tincidunt vestibulum in eu erat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.Phasellus porta, est quis consectetur sodales, metus dui condimentum felis, ut accumsansem purus eu tellus. Vestibulum pulvinar volutpat ante. Nullam in rhoncus lectus. Ut atultricies arcu, quis tristique ante. Sed sed felis ut justo consequat ultrices.",
-      user: true,
-    },
-    {
-      text: "Concordo",
-      user: false,
-    },
-    {
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed varius nunc consequat venenatis interdum. Fusce sed nisi sit amet ipsum tincidunt vestibulum in eu erat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.Phasellus porta, est quis consectetur sodales, metus dui condimentum felis, ut accumsansem purus eu tellus. Vestibulum pulvinar volutpat ante. Nullam in rhoncus lectus. Ut atultricies arcu, quis tristique ante. Sed sed felis ut justo consequat ultrices.",
-      user: true,
-    },
-    {
-      text: "Concordo",
-      user: false,
-    },
-    {
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed varius nunc consequat venenatis interdum. Fusce sed nisi sit amet ipsum tincidunt vestibulum in eu erat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.Phasellus porta, est quis consectetur sodales, metus dui condimentum felis, ut accumsansem purus eu tellus. Vestibulum pulvinar volutpat ante. Nullam in rhoncus lectus. Ut atultricies arcu, quis tristique ante. Sed sed felis ut justo consequat ultrices.",
-      user: true,
-    },
-    {
-      text: "Concordo",
-      user: false,
-    },
-  ];
+  const [data, setData] = useState([]);
+  const [messageText, setMessageText] = useState("");
+
+  const scrollRef = useRef(null);
+
+  const handleGetMessages = async () => {
+    const messages = await api.getMessages(userData.id, user.id);
+    messages.sort((a, b) => a.dataHora.localeCompare(b.dataHora));
+    setData(messages);
+  };
+
+  const handleSendMessage = async () => {
+    await api.sendMessage(userData.id, user.id, messageText);
+    setMessageText("");
+    handleGetMessages();
+  };
+
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
+  useEffect(() => {
+    handleGetMessages();
+  }, []);
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     handleGetMessages();
+  //   }, 1000);
+
+  //   return () => clearInterval(interval);
+  // }, []);
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
       <StatusBar style="auto" backgroundColor={theme.colors.secondary} />
-      <ChatHeader data={userData} />
+      <ChatHeader data={user} onPress={handleGoBack} />
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={styles.messagesContainer}
-        endFillColor={theme.colors.primary}
-        overScrollMode="never"
+        ref={scrollRef}
+        onContentSizeChange={() => scrollRef.current.scrollToEnd({ animated: true })}
       >
-        {mock.map((msg, index) => {
-          return <Message key={index} text={msg.text} user={msg.user} />;
-        })}
+        {data.map((message, index) => (
+          <Message key={index} data={message} user={message.from.id === userData.id} />
+        ))}
       </ScrollView>
-      <ChatInput />
+      <ChatInput value={messageText} onChangeText={setMessageText} onPress={handleSendMessage} />
     </KeyboardAvoidingView>
   );
 };

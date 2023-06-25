@@ -1,5 +1,5 @@
 import { useTheme } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
 
 import Button from "../components/Button";
@@ -21,7 +21,7 @@ const PhotoSignupPage = ({ route, navigation }) => {
   const [image, setImage] = useState();
 
   const onSubmit = () => {
-    signup({ ...data, avatar: image ? image : "" });
+    signup({ ...data, avatar: image ? "data:image/png;base64," + image.base64 : "" });
   };
 
   return (

@@ -1,18 +1,26 @@
 import { useTheme } from "@react-navigation/native";
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-const Message = ({ text, user = false }) => {
+const Message = ({ data, user = false }) => {
   const theme = useTheme();
   const styles = getStyles(theme, user);
+  const date = new Date(data.dataHora);
+
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}`;
 
   return (
     <View style={styles.container}>
       <View style={styles.messsage}>
-        <Text style={styles.text}>{text}</Text>
+        <Text style={styles.text}>{data.mensagem}</Text>
       </View>
       <View style={styles.timeContainer}>
-        <Text style={styles.timeText}>20:27</Text>
+        <Text style={styles.timeText}>{formattedTime}</Text>
       </View>
     </View>
   );

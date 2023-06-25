@@ -12,7 +12,7 @@ const LoginPage = ({ navigation }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
-  const { login, loading } = useAuth();
+  const { login, loading, loginError } = useAuth();
 
   const goToSignUp = () => {
     navigation.navigate("Signup");
@@ -83,6 +83,7 @@ const LoginPage = ({ navigation }) => {
               />
             )}
           />
+          <Text style={styles.errorText}>{loginError}</Text>
         </View>
 
         <View style={styles.buttonsContainer}>
@@ -143,6 +144,11 @@ const getStyles = (theme) =>
     },
     primaryText: {
       color: theme.colors.primary,
+      textAlign: "center",
+      fontSize: 15,
+    },
+    errorText: {
+      color: theme.colors.notification,
       textAlign: "center",
       fontSize: 15,
     },

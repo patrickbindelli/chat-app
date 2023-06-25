@@ -1,18 +1,15 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
-import React, { useEffect } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import React from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-import useAuth from "../hooks/useAuth";
-
-const ChatHeader = ({ data }) => {
+const ChatHeader = ({ data, onPress }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
-  const { logout } = useAuth();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={logout}>
+      <TouchableOpacity onPress={onPress}>
         <Ionicons name="chevron-back" size={25} color={theme.colors.text} />
       </TouchableOpacity>
 

@@ -1,7 +1,8 @@
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import * as NavigationBar from "expo-navigation-bar";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
-import { useColorScheme, Platform } from "react-native";
+import { Platform, useColorScheme } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import getStyles from "./global/stlyles";
@@ -31,7 +32,9 @@ function App() {
           }
         />
         <SafeAreaView style={styles.container}>
-          <Navigator />
+          <ActionSheetProvider>
+            <Navigator />
+          </ActionSheetProvider>
         </SafeAreaView>
       </SafeAreaProvider>
     </AuthProvider>

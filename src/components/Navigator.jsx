@@ -5,6 +5,7 @@ import { useColorScheme } from "react-native";
 import DarkTheme from "../../global/themes/DarkTheme";
 import LightTheme from "../../global/themes/LightTheme";
 import useAuth from "../hooks/useAuth";
+import ChatList from "../pages/ChatList";
 import ChatPage from "../pages/ChatPage";
 import HomeScreen from "../pages/HomeScreen";
 import LoginPage from "../pages/LoginPage";
@@ -20,7 +21,7 @@ const Navigator = () => {
   return (
     <NavigationContainer theme={scheme === "dark" ? DarkTheme : LightTheme}>
       <Stack.Navigator
-        initialRouteName={authenticated && !loading ? "Chat" : "Home"}
+        initialRouteName={authenticated && !loading ? "ChatList" : "Home"}
         screenOptions={{
           statusBarAnimation: "slide",
           headerShown: false,
@@ -28,7 +29,10 @@ const Navigator = () => {
         }}
       >
         {authenticated && !loading ? (
-          <Stack.Screen name="Chat" component={ChatPage} />
+          <>
+            <Stack.Screen name="ChatList" component={ChatList} />
+            <Stack.Screen name="Chat" component={ChatPage} />
+          </>
         ) : (
           <>
             <Stack.Screen name="Home" component={HomeScreen} />

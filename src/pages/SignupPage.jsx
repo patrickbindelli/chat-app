@@ -12,7 +12,7 @@ const SignupPage = ({ navigation }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
-  const { loading } = useAuth();
+  const { loading, signupError } = useAuth();
 
   const goToLogin = () => {
     navigation.navigate("Login");
@@ -122,6 +122,7 @@ const SignupPage = ({ navigation }) => {
               />
             )}
           />
+          <Text style={styles.errorText}>{signupError}</Text>
         </View>
 
         <View style={styles.buttonsContainer}>
@@ -180,6 +181,11 @@ const getStyles = (theme) =>
     },
     primaryText: {
       color: theme.colors.primary,
+      textAlign: "center",
+      fontSize: 15,
+    },
+    errorText: {
+      color: theme.colors.notification,
       textAlign: "center",
       fontSize: 15,
     },
