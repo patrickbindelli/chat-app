@@ -45,8 +45,5 @@ export const sendMessage = async (idFrom, idTo, message) => {
       idTo,
       mensagem: message,
     })
-    .then(() => {
-      console.log("aAA");
-    })
     .catch((err) => console.log("An error ocurred on the getUsersWithMessages method: ", err));
 };
