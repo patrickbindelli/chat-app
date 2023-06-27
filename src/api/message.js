@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const SERVER_URL = "http://10.0.0.158:8080";
+const SERVER_URL = "http://bdfemasschat-env-2.eba-7p43uarw.sa-east-1.elasticbeanstalk.com";
 
 export const getUser = async (identification) => {
   const user = await axios
@@ -16,6 +16,15 @@ export const getUsersWithMessages = async (id) => {
     .get(`${SERVER_URL}/message/buscarUsuariosComConversa/${id}`)
     .then(({ data }) => data)
     .catch((err) => console.log("An error ocurred on the getUsersWithMessages method: ", err));
+
+  return users;
+};
+
+export const getContacts = async (login) => {
+  const users = await axios
+    .get(`${SERVER_URL}/message/buscarUsuarios/${login}`)
+    .then(({ data }) => data)
+    .catch((err) => console.log("An error ocurred on the getContacts method: ", err));
 
   return users;
 };

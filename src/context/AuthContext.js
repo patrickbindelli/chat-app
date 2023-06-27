@@ -3,7 +3,7 @@ import axios from "axios";
 import * as SplashScreen from "expo-splash-screen";
 import React, { createContext, useEffect, useState } from "react";
 
-const SERVER_URL = "http://10.0.0.158:8080";
+const SERVER_URL = "http://bdfemasschat-env-2.eba-7p43uarw.sa-east-1.elasticbeanstalk.com";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,7 +27,12 @@ const AuthProvider = ({ children }) => {
       JSON.parse(data),
     );
 
-    const loggedUser = await AsyncStorage.getItem("@logged_user").then((data) => JSON.parse(data));
+    const loggedUser = await AsyncStorage.getItem("@logged_user")
+      .then((data) => JSON.parse(data))
+      .catch(async () => {
+        await AsyncStorage.removeItem("@logged_user");
+        await AsyncStorage.removeItem("@logged_user_hash");
+      });
 
     if (!loggedUser || !loggedUserHash) {
       setAuthenticated(false);

@@ -9,6 +9,8 @@ import ChatInput from "../components/ChatInput";
 import Message from "../components/Message";
 import useAuth from "../hooks/useAuth";
 
+const UPDATE_INTERVAL = 1000;
+
 const ChatPage = ({ route, navigation }) => {
   const { user } = route.params || {};
   const theme = useTheme();
@@ -21,16 +23,36 @@ const ChatPage = ({ route, navigation }) => {
 
   const scrollRef = useRef(null);
 
+  const handleAddMessageLocally = (text) => {
+    const newMessage = {
+      from: {
+        ...userData,
+      },
+      to: {
+        ...user,
+      },
+      mensagem: text,
+      dataHora: new Date(),
+    };
+
+    delete newMessage.from.avatar;
+    delete newMessage.to.avatar;
+
+    data.push(newMessage);
+  };
+
   const handleGetMessages = async () => {
     const messages = await api.getMessages(userData.id, user.id);
+
+    console.log(messages);
     messages.sort((a, b) => a.dataHora.localeCompare(b.dataHora));
     setData(messages);
   };
 
   const handleSendMessage = async () => {
+    handleAddMessageLocally(messageText);
     await api.sendMessage(userData.id, user.id, messageText);
     setMessageText("");
-    handleGetMessages();
   };
 
   const handleGoBack = () => {
@@ -38,16 +60,16 @@ const ChatPage = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    handleGetMessages();
-  }, []);
+    if (userData && user) {
+      handleGetMessages();
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     handleGetMessages();
-  //   }, 1000);
+      const interval = setInterval(() => {
+        handleGetMessages();
+      }, UPDATE_INTERVAL);
 
-  //   return () => clearInterval(interval);
-  // }, []);
+      return () => clearInterval(interval);
+    }
+  }, [userData, user]);
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>

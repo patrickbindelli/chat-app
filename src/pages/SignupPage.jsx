@@ -115,7 +115,7 @@ const SignupPage = ({ navigation }) => {
                 placeholder="********"
                 icon="lock-closed-outline"
                 secureTextEntry
-                keyboardType="visible-password"
+                keyboardType="password"
                 onChangeText={onChange}
                 value={value}
                 error={errors.senha}

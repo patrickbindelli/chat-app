@@ -7,6 +7,8 @@ const ChatHeader = ({ data, onPress }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
+  const image = "data:image/png;base64," + data.avatar.replace("data:image;base64,", "");
+
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPress}>
@@ -15,7 +17,7 @@ const ChatHeader = ({ data, onPress }) => {
 
       <TouchableOpacity style={styles.info}>
         {data ? (
-          <Image source={{ uri: data.avatar }} style={styles.image} />
+          <Image source={{ uri: image }} style={styles.image} />
         ) : (
           <Ionicons name="person-circle-outline" size={40} color={theme.colors.text} />
         )}

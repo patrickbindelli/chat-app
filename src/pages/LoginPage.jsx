@@ -79,7 +79,7 @@ const LoginPage = ({ navigation }) => {
                 value={value}
                 error={errors.password}
                 secureTextEntry
-                keyboardType="visible-password"
+                keyboardType="password"
               />
             )}
           />

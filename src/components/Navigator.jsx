@@ -10,6 +10,7 @@ import ChatPage from "../pages/ChatPage";
 import HomeScreen from "../pages/HomeScreen";
 import LoginPage from "../pages/LoginPage";
 import PhotoSignupPage from "../pages/PhotoSignupPage";
+import SearchUsers from "../pages/SearchUsers";
 import SignupPage from "../pages/SignupPage";
 
 const Stack = createNativeStackNavigator();
@@ -32,6 +33,7 @@ const Navigator = () => {
           <>
             <Stack.Screen name="ChatList" component={ChatList} />
             <Stack.Screen name="Chat" component={ChatPage} />
+            <Stack.Screen name="SearchUsers" component={SearchUsers} />
           </>
         ) : (
           <>

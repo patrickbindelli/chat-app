@@ -6,11 +6,8 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-nati
 import * as api from "../api/message";
 import ChatItem from "../components/ChatItem";
 import useAuth from "../hooks/useAuth";
-import NewChat from "../components/NewChat";
 
-const UPDATE_INTERVAL = 5000;
-
-const ChatList = ({ navigation }) => {
+const SearchUsers = ({ navigation }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
   const { logout, userData } = useAuth();
@@ -18,19 +15,13 @@ const ChatList = ({ navigation }) => {
   const [data, setData] = useState([]);
 
   const getMessagesData = async () => {
-    const messages = await api.getUsersWithMessages(userData.id);
+    const messages = await api.getContacts(userData.telefone);
     setData(messages);
   };
 
   useEffect(() => {
     if (userData) {
       getMessagesData();
-
-      const interval = setInterval(() => {
-        getMessagesData();
-      }, UPDATE_INTERVAL);
-
-      return () => clearInterval(interval);
     }
   }, [userData]);
 
@@ -38,26 +29,24 @@ const ChatList = ({ navigation }) => {
     navigation.navigate("Chat", { user });
   };
 
-  const handleGoToSearchUser = () => {
-    navigation.navigate("SearchUsers");
-  };
-
   return (
     <>
       <StatusBar style="auto" backgroundColor={theme.colors.secondary} />
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Mensagens</Text>
-          <TouchableOpacity onPress={logout}>
-            <Text style={styles.text}>Sair</Text>
-          </TouchableOpacity>
+          <Text style={styles.headerText}>Iniciar Conversa</Text>
         </View>
         <ScrollView style={{ width: "100%" }} contentContainerStyle={styles.scrollView}>
-          {data.map((user, index) => {
-            return <ChatItem key={index} data={user} onPress={() => handleGoToMessage(user)} />;
-          })}
+          {data.length ? (
+            data.map((user, index) => {
+              return <ChatItem key={index} data={user} onPress={() => handleGoToMessage(user)} />;
+            })
+          ) : (
+            <View style={styles.loadingContainer}>
+              <Text style={styles.textLoading}>Carregando...</Text>
+            </View>
+          )}
         </ScrollView>
-        <NewChat onPress={handleGoToSearchUser} />
       </View>
     </>
   );
@@ -67,7 +56,6 @@ const getStyles = (theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      position: "relative",
     },
     scrollView: {
       flexDirection: "column",
@@ -96,10 +84,19 @@ const getStyles = (theme) =>
       color: "white",
       fontSize: 20,
     },
+    loadingContainer: {
+      width: "100%",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    textLoading: {
+      color: "white",
+      fontSize: 20,
+    },
     text: {
       color: "white",
       fontSize: 15,
     },
   });
 
-export default ChatList;
+export default SearchUsers;

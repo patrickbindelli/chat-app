@@ -6,11 +6,13 @@ const ChatItem = ({ onPress, data }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
+  const image = "data:image/png;base64," + data.avatar;
+
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Image
         source={{
-          uri: data.avatar,
+          uri: image,
         }}
         style={styles.image}
       />
