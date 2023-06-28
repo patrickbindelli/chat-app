@@ -26,6 +26,10 @@ yarn start
 
 Isso irá executar o projeto no seu terminal. A partir daí, você pode executar o aplicativo utilizando o app Expo Go.
 
+## Protótipo Figma
+
+![image](https://github.com/patrickbindelli/chat-app/assets/68287231/c1d3617f-1443-4702-9132-e40d657d0134)
+
 ## Licença
 
 Este projeto está licenciado sob a licença MIT. Para mais informações, consulte o arquivo LICENSE.
